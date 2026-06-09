@@ -1,182 +1,197 @@
 # EduSphere
 
-## Smart University Management System
+## Overview
 
-EduSphere is a desktop-based University Management System developed using Java Swing and MySQL. It provides a centralized platform for managing academic and administrative activities including student records, faculty management, attendance tracking, examinations, and fee management.
+EduSphere is a modern University Management System designed to streamline academic and administrative operations through a centralized digital platform.
 
----
+The project combines a modern web-based interface built with HTML, CSS, and JavaScript with Java and MySQL backend modules for managing university operations efficiently.
+
+<p align="center">
+  <img src="Assets/banner.png" alt="EduSphere Banner" width="100%">
+</p>
 
 ## Features
 
+### Dashboard
+
+- University analytics and statistics
+- Academic performance overview
+- Administrative insights
+- Quick access to system modules
+
 ### Student Management
 
-- Add New Students
-- Update Student Information
-- View Student Details
-- Delete Student Records
+- Add student records
+- Update student information
+- Manage academic details
+- View student profiles
 
 ### Faculty Management
 
-- Add New Faculty Members
-- Update Faculty Information
-- View Faculty Details
-- Delete Faculty Records
+- Add faculty members
+- Manage teacher records
+- Department allocation
+- Faculty profile management
 
 ### Attendance Management
 
-- Student Attendance Tracking
-- Faculty Attendance Tracking
-- Attendance Reports
+- Student attendance tracking
+- Faculty attendance tracking
+- Attendance reports
+- Attendance analytics
 
 ### Examination Management
 
-- Enter Student Marks
-- View Examination Details
-- Generate Results
+- Marks entry system
+- Examination records
+- Result generation
+- Performance tracking
 
 ### Fee Management
 
-- View Fee Structure
-- Record Student Fee Payments
-- Semester-wise Fee Tracking
-
-### Dashboard
-
-- Centralized University Control Panel
-- Easy Navigation Across Modules
-- User-Friendly Interface
-
----
+- Fee structure management
+- Payment records
+- Fee tracking
+- Financial reporting
 
 ## Technology Stack
 
-| Category              | Technology |
-| --------------------- | ---------- |
-| Language              | Java       |
-| GUI Framework         | Java Swing |
-| Database              | MySQL      |
-| Database Connectivity | JDBC       |
-| IDE                   | NetBeans   |
+| Category              | Technology              |
+| --------------------- | ----------------------- |
+| Frontend              | HTML5, CSS3, JavaScript |
+| Backend               | Java                    |
+| Database              | MySQL                   |
+| Database Connectivity | JDBC                    |
+| Icons                 | Font Awesome            |
+| IDE                   | VS Code                 |
+| Version Control       | Git & GitHub            |
 
----
+## Project Structure
 
-## Database Tables
+```text
+EduSphere/
+│
+├── Assets/
+├── CSS/
+├── JS/
+├── Pages/
+│
+├── Java-Backend/
+│   ├── AddStudent.java
+│   ├── AddTeacher.java
+│   ├── Conn.java
+│   ├── EnterMarks.java
+│   ├── ExaminationDetails.java
+│   ├── FeeStructure.java
+│   ├── Login.java
+│   ├── Marks.java
+│   ├── Project.java
+│   ├── StudentAttendance.java
+│   ├── StudentDetails.java
+│   ├── StudentFeeForm.java
+│   ├── TeacherAttendance.java
+│   ├── TeacherDetails.java
+│   ├── UpdateStudent.java
+│   ├── UpdateTeacher.java
+│   └── mysql_commands.txt
+│
+├── index.html
+├── README.md
+└── .gitignore
+```
+
+## Modules
+
+### Authentication Module
+
+Secure administrator login and access control.
+
+### Student Module
+
+Manage student information, profiles, and academic records.
+
+### Faculty Module
+
+Manage teacher records, departments, and faculty information.
+
+### Attendance Module
+
+Track attendance records for students and faculty members.
+
+### Examination Module
+
+Manage examinations, marks, and result generation.
+
+### Fee Module
+
+Track student fee payments and manage fee structures.
+
+## Database
+
+EduSphere uses MySQL as the primary database system.
+
+### Core Tables
 
 - login
 - student
 - teacher
 - attendance_student
 - attendance_teacher
-- fee
-- subject
 - marks
+- subject
+- fee
 
----
+## Installation
 
-## Project Modules
-
-### Authentication Module
-
-Secure login system for administrators.
-
-### Student Management Module
-
-Manage student admissions, records, and academic information.
-
-### Faculty Management Module
-
-Maintain faculty profiles and information.
-
-### Attendance Module
-
-Track and manage attendance for students and faculty.
-
-### Examination Module
-
-Manage subjects, marks, and examination results.
-
-### Fee Management Module
-
-Handle fee structures and payment records.
-
----
-
-## Installation Guide
-
-### 1. Clone Repository
+### Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/EduSphere.git
+git clone https://github.com/your-username/EduSphere.git
 ```
 
-### 2. Create Database
+### Configure Database
+
+Create a MySQL database:
 
 ```sql
 CREATE DATABASE ums;
 ```
 
-### 3. Import Database Tables
-
-Execute all SQL commands available in:
+Import SQL commands from:
 
 ```text
-src/university/mysql_commands.txt
+Java-Backend/mysql_commands.txt
 ```
 
-### 4. Configure Database Connection
+### Configure JDBC
 
-Update database credentials in:
-
-```java
-Conn.java
-```
-
-Example:
-
-```java
-jdbc:mysql://localhost:3306/ums
-Username: root
-Password: your_password
-```
-
-### 5. Run Application
-
-Run:
+Update database credentials inside:
 
 ```text
-Login.java
+Java-Backend/Conn.java
 ```
 
-## System Modules Overview
+### Run Project
 
-| Module      | Description                     |
-| ----------- | ------------------------------- |
-| Login       | Secure User Authentication      |
-| Students    | Student Registration & Records  |
-| Faculty     | Faculty Registration & Records  |
-| Attendance  | Attendance Tracking             |
-| Examination | Marks & Results Management      |
-| Fees        | Fee Collection & Tracking       |
-| Reports     | Academic Information Management |
-
----
+1. Configure MySQL Database
+2. Import SQL Tables
+3. Run Java Backend Modules
+4. Launch Frontend Pages in Browser
 
 ## Future Enhancements
 
-- Web-Based Version
-- Online Fee Payment Gateway
 - Student Portal
 - Faculty Portal
-- Placement Management Module
-- Analytics Dashboard
+- Online Fee Payment Integration
+- Placement Management
 - Notification System
-- Cloud Database Integration
-
----
+- Cloud Deployment
+- Mobile Application
+- Advanced Analytics Dashboard
 
 ## Screenshots
 
-- Login Screen
+- Login Page
 - Dashboard
 - Student Management
 - Faculty Management
@@ -184,23 +199,18 @@ Login.java
 - Examination Management
 - Fee Management
 
----
-
 ## Developer
 
 **Mayank Prashar**
 
-B.Tech Computer Science & Engineering  
-Galgotias University
+Bachelor of Technology (Computer Science & Engineering)
 
----
+Galgotias University
 
 ## Project Vision
 
-EduSphere aims to simplify university operations through digital transformation by providing a unified platform for academic and administrative management.
+EduSphere aims to simplify university administration by integrating academic and administrative processes into a unified digital ecosystem.
 
----
+## License
 
-### EduSphere
-
-**Smart University Management System**
+This project is developed for educational and learning purposes.
