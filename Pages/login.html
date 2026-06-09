@@ -5,16 +5,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login — EduSphere</title>
-    <link rel="icon" href="../Assets/logo.png" type="image/png" />
+
+    <!-- Favicon: logo.png -->
+    <link rel="icon" type="image/png" href="../Assets/logo.png" />
+    <link rel="shortcut icon" type="image/png" href="../Assets/logo.png" />
+    <link rel="apple-touch-icon" href="../Assets/logo.png" />
+
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
         rel="stylesheet" />
+
     <style>
         :root {
             --primary: #0f4c81;
             --primary-light: #1a6bbf;
             --accent: #00c9a7;
+            --accent-dim: rgba(0, 201, 167, 0.18);
             --bg: #f0f4f8;
             --surface: #ffffff;
             --border: #d0dce8;
@@ -38,17 +48,12 @@
             background: var(--bg);
         }
 
+        /* ── LEFT PANEL ─────────────────────────────── */
         .login-left {
             flex: 1;
             background:
-                linear-gradient(rgba(11, 79, 140, 0.78),
-                    rgba(0, 201, 167, 0.35)),
-                url('../Assets/login_BG.jpg');
-            backdrop-filter: blur(2px);
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
+                linear-gradient(rgba(2, 30, 242, 0.8), rgba(8, 10, 25, 0.32)),
+                url('../Assets/login_BG.jpg') center / cover no-repeat;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,6 +72,7 @@
             height: 400px;
             background: radial-gradient(circle, rgba(7, 97, 242, 0.18) 0%, transparent 70%);
             border-radius: 50%;
+            pointer-events: none;
         }
 
         .login-left::after {
@@ -78,6 +84,7 @@
             height: 300px;
             background: radial-gradient(circle, rgba(3, 35, 244, 0.12) 0%, transparent 70%);
             border-radius: 50%;
+            pointer-events: none;
         }
 
         .left-content {
@@ -88,11 +95,11 @@
         }
 
         .left-logo {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             object-fit: contain;
-            margin: 0 auto 24px;
-            /* filter: drop-shadow(0 8px 24px rgba(0, 201, 167, .4)); */
+            margin: 0 auto 20px;
+            filter: drop-shadow(0 6px 20px rgba(0, 201, 167, 0.45));
         }
 
         .left-title {
@@ -100,54 +107,68 @@
             font-size: 2rem;
             font-weight: 700;
             color: #fff;
-            letter-spacing: -.03em;
+            letter-spacing: -0.03em;
             margin-bottom: 8px;
         }
 
+        /* "Sphere" part uses the teal accent — not raw 'blue' */
         .left-title span {
-            color: blue;
+            color: var(--accent);
         }
 
         .left-sub {
-            font-size: .95rem;
-            color: rgba(255, 255, 255, .6);
-            line-height: 1.6;
-            margin-bottom: 40px;
+            font-size: 0.92rem;
+            color: rgba(255, 255, 255, 0.65);
+            line-height: 1.65;
+            margin-bottom: 36px;
         }
 
         .feature-list {
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
         .feature-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 8px 0;
-            color: rgba(255, 255, 255, .75);
-            font-size: .875rem;
+            padding: 9px 12px;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 0.875rem;
+            transition: background 0.2s;
         }
 
-        .feature-item i {
-            width: 28px;
-            height: 28px;
-            background: rgba(0, 201, 167, .2);
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        .feat-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-dim);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
-            font-size: .75rem;
             flex-shrink: 0;
         }
 
-        /* Right panel */
+        .feat-icon i {
+            color: var(--accent);
+            font-size: 0.82rem;
+        }
+
+        /* ── RIGHT PANEL ────────────────────────────── */
         .login-right {
             width: 480px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 48px 40px;
+            background: var(--surface);
         }
 
         .login-form-wrap {
@@ -155,44 +176,72 @@
             max-width: 380px;
         }
 
+        /* Small brand mark at top of form */
+        .form-brand {
+            display: flex;
+            align-items: center;
+            /* gap: 10px; */
+            margin-bottom: 28px;
+        }
+
+        .form-brand img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .form-brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .form-brand-name span {
+            color: var(--accent);
+        }
+
         .form-header {
-            margin-bottom: 36px;
+            margin-bottom: 28px;
         }
 
         .form-eyebrow {
-            font-size: .75rem;
+            font-size: 0.72rem;
             font-weight: 600;
-            letter-spacing: .12em;
+            letter-spacing: 0.13em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .form-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.75rem;
+            font-size: 1.65rem;
             font-weight: 700;
             color: var(--text-primary);
-            letter-spacing: -.03em;
+            letter-spacing: -0.03em;
         }
 
         .form-desc {
-            font-size: .875rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            margin-top: 6px;
+            margin-top: 5px;
+            line-height: 1.5;
         }
 
+        /* ── FORM INPUTS ────────────────────────────── */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-label {
             display: block;
-            font-size: .8rem;
+            font-size: 0.78rem;
             font-weight: 600;
             color: var(--text-secondary);
-            margin-bottom: 8px;
-            letter-spacing: .02em;
+            margin-bottom: 7px;
+            letter-spacing: 0.02em;
         }
 
         .input-wrap {
@@ -205,7 +254,8 @@
             position: absolute;
             left: 14px;
             color: var(--text-muted);
-            font-size: .85rem;
+            font-size: 0.82rem;
+            pointer-events: none;
         }
 
         .form-input {
@@ -213,54 +263,76 @@
             padding: 12px 14px 12px 40px;
             border: 1.5px solid var(--border);
             border-radius: 10px;
-            font-size: .875rem;
+            font-size: 0.875rem;
             font-family: 'Inter', sans-serif;
             color: var(--text-primary);
             background: var(--surface);
             outline: none;
-            transition: all .2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
         }
 
         .form-input:focus {
             border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(26, 107, 191, .08);
+            box-shadow: 0 0 0 3px rgba(26, 107, 191, 0.09);
         }
 
         .input-eye {
             position: absolute;
             right: 14px;
             color: var(--text-muted);
-            font-size: .85rem;
+            font-size: 0.82rem;
             cursor: pointer;
             padding: 4px;
+            transition: color 0.15s;
         }
 
+        .input-eye:hover {
+            color: var(--primary);
+        }
+
+        /* ── REMEMBER / FORGOT ──────────────────────── */
         .remember-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 22px;
         }
 
         .remember-check {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: .83rem;
+            font-size: 0.82rem;
             color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .remember-check input[type="checkbox"] {
+            accent-color: var(--primary);
+            width: 15px;
+            height: 15px;
             cursor: pointer;
         }
 
-        .remember-check input {
-            accent-color: var(--primary);
-        }
-
         .forgot {
-            font-size: .83rem;
+            font-size: 0.82rem;
             color: var(--primary-light);
             font-weight: 500;
+            text-decoration: none;
+            transition: color 0.15s;
         }
 
+        .forgot:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* ── LOGIN BUTTON ───────────────────────────── */
         .login-btn {
             width: 100%;
             padding: 13px;
@@ -269,33 +341,42 @@
             border: none;
             border-radius: 10px;
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
+            font-size: 0.97rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all .2s;
+            transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 9px;
+            letter-spacing: 0.01em;
         }
 
         .login-btn:hover {
             background: var(--primary-light);
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(15, 76, 129, .25);
+            box-shadow: 0 4px 18px rgba(15, 76, 129, 0.28);
         }
 
         .login-btn:active {
             transform: translateY(0);
+            box-shadow: none;
         }
 
+        .login-btn i {
+            font-size: 0.9rem;
+        }
+
+        /* ── DIVIDER ────────────────────────────────── */
         .divider {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin: 24px 0;
+            margin: 22px 0;
             color: var(--text-muted);
-            font-size: .8rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
         }
 
         .divider::before,
@@ -306,26 +387,45 @@
             background: var(--border);
         }
 
-        .demo-note {
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: .8rem;
-            color: #0369a1;
-            display: flex;
-            gap: 8px;
-            align-items: flex-start;
-        }
 
+        /* ── ERROR MESSAGE ──────────────────────────── */
         .error-msg {
             background: #fee2e2;
+            border: 1px solid #fecaca;
             color: #991b1b;
-            border-radius: 8px;
+            border-radius: 9px;
             padding: 10px 14px;
-            font-size: .83rem;
+            font-size: 0.82rem;
             display: none;
+            align-items: center;
+            gap: 8px;
             margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .error-msg i {
+            flex-shrink: 0;
+            font-size: 0.88rem;
+        }
+
+        /* ── FOOTER TEXT ────────────────────────────── */
+        .form-footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+        }
+
+        .form-footer strong {
+            color: var(--text-secondary);
+        }
+
+        /* ── RESPONSIVE ─────────────────────────────── */
+        @media (max-width: 900px) {
+            .login-right {
+                width: 420px;
+                padding: 40px 28px;
+            }
         }
 
         @media (max-width: 768px) {
@@ -336,61 +436,100 @@
             .login-right {
                 width: 100%;
                 padding: 32px 24px;
+                background: var(--bg);
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Left Panel -->
+
+    <!-- ════ LEFT PANEL ════ -->
     <div class="login-left">
         <div class="left-content">
+
             <img src="../Assets/logo.png" alt="EduSphere Logo" class="left-logo" />
+
             <h1 class="left-title">Edu<span>Sphere</span></h1>
             <p class="left-sub">Smart University Management System — streamline every academic process from a single
                 platform.</p>
+
             <div class="feature-list">
-                <div class="feature-item"><i class="fa-solid fa-users"></i> Student & Faculty Management</div>
-                <div class="feature-item"><i class="fa-solid fa-calendar-check"></i> Attendance Tracking</div>
-                <div class="feature-item"><i class="fa-solid fa-file-pen"></i> Examination & Marks</div>
-                <div class="feature-item"><i class="fa-solid fa-indian-rupee-sign"></i> Fee Management</div>
-                <div class="feature-item"><i class="fa-solid fa-chart-line"></i> Real-time Analytics</div>
+
+                <div class="feature-item">
+                    <div class="feat-icon"><i class="fa-solid fa-users"></i></div>
+                    Student &amp; Faculty Management
+                </div>
+
+                <div class="feature-item">
+                    <div class="feat-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    Attendance Tracking
+                </div>
+
+                <div class="feature-item">
+                    <div class="feat-icon"><i class="fa-solid fa-file-pen"></i></div>
+                    Examination &amp; Marks
+                </div>
+
+                <div class="feature-item">
+                    <div class="feat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                    Fee Management
+                </div>
+
+                <div class="feature-item">
+                    <div class="feat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    Real-time Analytics
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Right Panel -->
+    <!-- ════ RIGHT PANEL ════ -->
     <div class="login-right">
         <div class="login-form-wrap">
+
+            <!-- Mini brand mark -->
+            <div class="form-brand">
+                <img src="../Assets/logo.png" alt="EduSphere" />
+                <span class="form-brand-name">Edu<span>Sphere</span></span>
+            </div>
+
             <div class="form-header">
                 <p class="form-eyebrow">Welcome Back</p>
                 <h2 class="form-title">Sign in to EduSphere</h2>
                 <p class="form-desc">Enter your credentials to access the admin dashboard.</p>
             </div>
 
+            <!-- Error message (Font Awesome icon only — no emoji) -->
             <div class="error-msg" id="errorMsg">
-                <i class="fa-solid fa-circle-exclamation"></i> Invalid username or password.
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="errorText">Invalid username or password.</span>
             </div>
 
+            <!-- Username -->
             <div class="form-group">
-                <label class="form-label">Username</label>
+                <label class="form-label" for="username">Username</label>
                 <div class="input-wrap">
                     <i class="fa-solid fa-user input-icon"></i>
-                    <input type="text" class="form-input" id="username" placeholder="Enter username"
+                    <input type="text" class="form-input" id="username" placeholder="Enter your username"
                         autocomplete="username" />
                 </div>
             </div>
 
+            <!-- Password -->
             <div class="form-group">
-                <label class="form-label">Password</label>
+                <label class="form-label" for="password">Password</label>
                 <div class="input-wrap">
                     <i class="fa-solid fa-lock input-icon"></i>
-                    <input type="password" class="form-input" id="password" placeholder="Enter password"
+                    <input type="password" class="form-input" id="password" placeholder="Enter your password"
                         autocomplete="current-password" />
-                    <i class="fa-solid fa-eye input-eye" id="togglePwd" onclick="togglePassword()"></i>
+                    <i class="fa-solid fa-eye input-eye" id="togglePwd" onclick="togglePassword()"
+                        title="Show / hide password"></i>
                 </div>
             </div>
 
+            <!-- Remember / Forgot -->
             <div class="remember-row">
                 <label class="remember-check">
                     <input type="checkbox" id="remember" /> Remember me
@@ -398,53 +537,74 @@
                 <a href="#" class="forgot">Forgot password?</a>
             </div>
 
-            <button class="login-btn" onclick="handleLogin()">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+            <!-- Sign In button -->
+            <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                Sign In
             </button>
 
-            <!-- <div class="divider">Demo Credentials</div>
-            <div class="demo-note">
-                <i class="fa-solid fa-circle-info" style="margin-top:2px; flex-shrink:0;"></i>
-                <span>Use <strong>admin</strong> / <strong>admin</strong> for demo access. Connect to your MySQL
-                    database for live data.</span>
-            </div> -->
+            <p class="form-footer">
+                <strong>EduSphere</strong> : Smart University Management System
+            </p>
+
         </div>
     </div>
 
     <script>
+        /* ── Toggle password visibility ── */
         function togglePassword() {
             const pwd = document.getElementById('password');
             const icon = document.getElementById('togglePwd');
-            if (pwd.type === 'password') {
-                pwd.type = 'text';
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
-            } else {
-                pwd.type = 'password';
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
-            }
+            const show = pwd.type === 'password';
+            pwd.type = show ? 'text' : 'password';
+            icon.classList.toggle('fa-eye', !show);
+            icon.classList.toggle('fa-eye-slash', show);
         }
 
+        /* ── Show / hide error ── */
+        function showError(msg) {
+            const err = document.getElementById('errorMsg');
+            const text = document.getElementById('errorText');
+            text.textContent = msg;
+            err.style.display = 'flex';
+        }
+
+        function clearError() {
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+
+        /* ── Handle login ── */
         function handleLogin() {
             const u = document.getElementById('username').value.trim();
             const p = document.getElementById('password').value;
-            const err = document.getElementById('errorMsg');
 
-            if (!u || !p) {
-                err.style.display = 'flex';
-                err.textContent = ' Please fill in all fields.';
-                return;
-            }
-            if (u === 'admin' && p === 'admin') {
+            clearError();
+
+            if (!u && !p) { showError('Please enter your username and password.'); return; }
+            if (!u) { showError('Please enter your username.'); return; }
+            if (!p) { showError('Please enter your password.'); return; }
+
+            if (u === 'Mayank Prashar' && p === 'Mayank@123') {
+                if (document.getElementById('remember').checked) {
+                    localStorage.setItem('es_user', u);
+                }
                 sessionStorage.setItem('es_user', u);
                 window.location.href = '../index.html';
             } else {
-                err.style.display = 'flex';
-                err.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i>&nbsp; Invalid username or password.';
+                showError('Invalid username or password. Please try again.');
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
             }
         }
 
+        /* ── Enter key support ── */
         document.addEventListener('keydown', e => {
             if (e.key === 'Enter') handleLogin();
+        });
+
+        /* ── Clear error on input ── */
+        ['username', 'password'].forEach(id => {
+            document.getElementById(id).addEventListener('input', clearError);
         });
     </script>
 </body>

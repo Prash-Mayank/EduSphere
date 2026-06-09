@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance — EduSphere</title>
+    <link rel="icon" type="image/png" href="../Assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <style>
+        .tabs-wrap {
+            margin-bottom: 24px;
+        }
+
+        .mark-card {
+            background: var(--grad-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-md);
+            padding: 28px 32px;
+            max-width: 560px;
+            margin-bottom: 28px;
+        }
+
+        .mark-card .field select,
+        .mark-card .field input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--clr-text);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .mark-card .field select:focus,
+        .mark-card .field input:focus {
+            border-color: var(--clr-teal);
+        }
+
+        .mark-card .field select option {
+            background: var(--clr-navy-mid);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .status-present {
+            background: rgba(127, 255, 79, 0.1);
+            color: var(--clr-lime);
+            border: 1px solid rgba(127, 255, 79, 0.2);
+        }
+
+        .status-absent {
+            background: rgba(255, 80, 80, 0.1);
+            color: #ff8080;
+            border: 1px solid rgba(255, 80, 80, 0.2);
+        }
+
+        .status-leave {
+            background: rgba(240, 192, 64, 0.1);
+            color: var(--clr-gold);
+            border: 1px solid rgba(240, 192, 64, 0.2);
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .summary-box {
+            background: var(--grad-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            text-align: center;
+        }
+
+        .summary-box__val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--clr-white);
+        }
+
+        .summary-box__lbl {
+            font-size: 0.8rem;
+            color: var(--clr-muted);
+            margin-top: 4px;
+        }
+
+        .pane {
+            display: none;
+        }
+
+        .pane.active {
+            display: block;
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            color: var(--clr-text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            border-color: var(--clr-teal);
+        }
+
+        .filter-bar input {
+            min-width: 200px;
+        }
+
+        .filter-bar select option {
+            background: var(--clr-navy-mid);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell" id="appShell">
+
+        <header class="topbar">
+            <button class="topbar__toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+            <div class="topbar__brand">
+                <img src="../Assets/logo.png" alt="EduSphere" class="topbar__logo" />
+                <span class="topbar__name">EduSphere</span>
+            </div>
+            <div class="topbar__search"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                    placeholder="Search…" /></div>
+            <div class="topbar__actions">
+                <button class="topbar__icon-btn"><i class="fa-solid fa-bell"></i><span
+                        class="notif-badge"></span></button>
+                <div class="topbar__avatar">A</div>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <p class="sidebar__section-label">Main</p>
+            <a href="../index.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">Management</p>
+            <a href="students.html" class="nav-item"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
+            <a href="teachers.html" class="nav-item"><i class="fa-solid fa-chalkboard-user"></i><span>Faculty</span></a>
+            <a href="attendance.html" class="nav-item active"><i
+                    class="fa-solid fa-calendar-check"></i><span>Attendance</span></a>
+            <a href="examination.html" class="nav-item"><i class="fa-solid fa-file-pen"></i><span>Examination</span></a>
+            <a href="fees.html" class="nav-item"><i class="fa-solid fa-indian-rupee-sign"></i><span>Fee
+                    Management</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">System</p>
+            <a href="#" class="nav-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i><span>Log
+                    Out</span></a>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-header__title">Attendance Tracking</h1>
+                    <p class="page-header__sub">Mark and view attendance for students and faculty</p>
+                </div>
+                <div class="page-header__actions">
+                    <button class="btn btn-outline" onclick="exportAttendance()"><i class="fa-solid fa-download"></i>
+                        Export</button>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="summary-row">
+                <div class="summary-box">
+                    <div class="summary-box__val" style="color:var(--clr-lime)"><span id="presentCount">0</span></div>
+                    <div class="summary-box__lbl"><i class="fa-solid fa-circle-check" style="color:var(--clr-lime)"></i>
+                        Present Today</div>
+                </div>
+                <div class="summary-box">
+                    <div class="summary-box__val" style="color:#ff8080"><span id="absentCount">0</span></div>
+                    <div class="summary-box__lbl"><i class="fa-solid fa-circle-xmark" style="color:#ff8080"></i> Absent
+                        Today</div>
+                </div>
+                <div class="summary-box">
+                    <div class="summary-box__val" style="color:var(--clr-gold)"><span id="leaveCount">0</span></div>
+                    <div class="summary-box__lbl"><i class="fa-solid fa-moon" style="color:var(--clr-gold)"></i> On
+                        Leave Today</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs tabs-wrap">
+                <button class="tab-btn active" onclick="switchTab('mark')">Mark Attendance</button>
+                <button class="tab-btn" onclick="switchTab('view')">View Records</button>
+                <button class="tab-btn" onclick="switchTab('teacher')">Faculty Attendance</button>
+            </div>
+
+            <!-- ── MARK TAB ── -->
+            <div class="pane active" id="pane-mark">
+                <div class="mark-card">
+                    <h3 style="color:var(--clr-white);font-size:1.05rem;font-weight:700;margin-bottom:20px;">
+                        <i class="fa-solid fa-clipboard-check" style="color:var(--clr-teal)"></i> Mark Student
+                        Attendance
+                    </h3>
+                    <div class="field" style="margin-bottom:16px;">
+                        <label>Select Roll Number</label>
+                        <select id="markRoll">
+                            <option value="">-- Select Student --</option>
+                        </select>
+                    </div>
+                    <div class="form-row" style="margin-bottom:16px;">
+                        <div class="field">
+                            <label>First Half</label>
+                            <select id="markFirst">
+                                <option>Present</option>
+                                <option>Absent</option>
+                                <option>Leave</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Second Half</label>
+                            <select id="markSecond">
+                                <option>Present</option>
+                                <option>Absent</option>
+                                <option>Leave</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:20px;">
+                        <label>Date</label>
+                        <input type="date" id="markDate" />
+                    </div>
+                    <button class="btn btn-grad" style="width:100%;" onclick="markAttendance('student')">
+                        <i class="fa-solid fa-circle-check"></i> Confirm Attendance
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── VIEW TAB ── -->
+            <div class="pane" id="pane-view">
+                <div class="filter-bar">
+                    <input type="text" id="viewSearch" placeholder="🔍  Filter by roll number…"
+                        oninput="renderAttendance()" />
+                    <input type="date" id="viewDate" oninput="renderAttendance()" />
+                    <button class="btn btn-ghost btn-sm"
+                        onclick="document.getElementById('viewSearch').value='';document.getElementById('viewDate').value='';renderAttendance();">
+                        <i class="fa-solid fa-xmark"></i> Clear
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card__body" style="padding:0;">
+                        <div class="es-table-wrap">
+                            <table class="es-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Roll No</th>
+                                        <th>Date &amp; Time</th>
+                                        <th>First Half</th>
+                                        <th>Second Half</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── TEACHER TAB ── -->
+            <div class="pane" id="pane-teacher">
+                <div class="mark-card">
+                    <h3 style="color:var(--clr-white);font-size:1.05rem;font-weight:700;margin-bottom:20px;">
+                        <i class="fa-solid fa-chalkboard-user" style="color:var(--clr-teal)"></i> Mark Faculty
+                        Attendance
+                    </h3>
+                    <div class="field" style="margin-bottom:16px;">
+                        <label>Select Employee ID</label>
+                        <select id="markEmpId">
+                            <option value="">-- Select Faculty --</option>
+                        </select>
+                    </div>
+                    <div class="form-row" style="margin-bottom:16px;">
+                        <div class="field">
+                            <label>First Half</label>
+                            <select id="markTFirst">
+                                <option>Present</option>
+                                <option>Absent</option>
+                                <option>Leave</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Second Half</label>
+                            <select id="markTSecond">
+                                <option>Present</option>
+                                <option>Absent</option>
+                                <option>Leave</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" style="margin-bottom:20px;">
+                        <label>Date</label>
+                        <input type="date" id="markTDate" />
+                    </div>
+                    <button class="btn btn-grad" style="width:100%;" onclick="markAttendance('teacher')">
+                        <i class="fa-solid fa-circle-check"></i> Confirm Attendance
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card__header"><span class="card__title"><i class="fa-solid fa-list-check"></i> Faculty
+                            Attendance Records</span></div>
+                    <div class="card__body" style="padding:0;">
+                        <div class="es-table-wrap">
+                            <table class="es-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Emp ID</th>
+                                        <th>Date &amp; Time</th>
+                                        <th>First Half</th>
+                                        <th>Second Half</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="teacherAttBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        if (!sessionStorage.getItem('es_user') && !localStorage.getItem('es_user')) {
+            window.location.href = '../Pages/login.html';
+        }
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('appShell').classList.toggle('collapsed');
+        });
+        function logout() {
+            sessionStorage.removeItem('es_user'); localStorage.removeItem('es_user');
+            window.location.href = '../Pages/login.html';
+        }
+
+        // Set today's date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('markDate').value = today;
+        document.getElementById('markTDate').value = today;
+
+        // Populate roll number dropdown from stored students
+        function populateDropdowns() {
+            const students = JSON.parse(localStorage.getItem('es_students') || '[]');
+            const sel = document.getElementById('markRoll');
+            students.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s.rollno; opt.textContent = `${s.rollno} — ${s.name}`;
+                sel.appendChild(opt);
+            });
+
+            const teachers = JSON.parse(localStorage.getItem('es_teachers') || '[]');
+            const tsel = document.getElementById('markEmpId');
+            teachers.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.empid; opt.textContent = `${t.empid} — ${t.name}`;
+                tsel.appendChild(opt);
+            });
+        }
+        populateDropdowns();
+
+        // Attendance data
+        let studentAtt = JSON.parse(localStorage.getItem('es_student_att') || '[]');
+        let teacherAtt = JSON.parse(localStorage.getItem('es_teacher_att') || '[]');
+
+        function markAttendance(type) {
+            if (type === 'student') {
+                const roll = document.getElementById('markRoll').value;
+                if (!roll) { toast('Select a student first.', 'error'); return; }
+                const rec = {
+                    id: Date.now(),
+                    rollno: roll,
+                    date: document.getElementById('markDate').value,
+                    first: document.getElementById('markFirst').value,
+                    second: document.getElementById('markSecond').value,
+                };
+                studentAtt.unshift(rec);
+                localStorage.setItem('es_student_att', JSON.stringify(studentAtt));
+                toast('Student attendance marked!', 'success');
+            } else {
+                const emp = document.getElementById('markEmpId').value;
+                if (!emp) { toast('Select a faculty member first.', 'error'); return; }
+                const rec = {
+                    id: Date.now(),
+                    empid: emp,
+                    date: document.getElementById('markTDate').value,
+                    first: document.getElementById('markTFirst').value,
+                    second: document.getElementById('markTSecond').value,
+                };
+                teacherAtt.unshift(rec);
+                localStorage.setItem('es_teacher_att', JSON.stringify(teacherAtt));
+                toast('Faculty attendance marked!', 'success');
+            }
+            updateSummary(); renderAttendance(); renderTeacherAtt();
+        }
+
+        function updateSummary() {
+            const todayStr = today;
+            const todays = studentAtt.filter(r => r.date === todayStr);
+            document.getElementById('presentCount').textContent = todays.filter(r => r.first === 'Present').length;
+            document.getElementById('absentCount').textContent = todays.filter(r => r.first === 'Absent').length;
+            document.getElementById('leaveCount').textContent = todays.filter(r => r.first === 'Leave').length;
+        }
+
+        function statusBadge(s) {
+            const map = { Present: 'present', Absent: 'absent', Leave: 'leave' };
+            return `<span class="status-badge status-${map[s] || 'present'}">${s}</span>`;
+        }
+
+        function renderAttendance() {
+            const q = (document.getElementById('viewSearch').value || '').toLowerCase();
+            const d = document.getElementById('viewDate').value;
+            const data = studentAtt.filter(r =>
+                (!q || r.rollno.toLowerCase().includes(q)) &&
+                (!d || r.date === d)
+            );
+            document.getElementById('attendanceBody').innerHTML = data.length
+                ? data.map((r, i) => `
+          <tr>
+            <td style="color:var(--clr-muted)">${i + 1}</td>
+            <td><code style="color:var(--clr-teal)">${r.rollno}</code></td>
+            <td style="color:var(--clr-muted);font-size:0.82rem">${r.date}</td>
+            <td>${statusBadge(r.first)}</td>
+            <td>${statusBadge(r.second)}</td>
+          </tr>`).join('')
+                : `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--clr-muted);">No records found</td></tr>`;
+        }
+
+        function renderTeacherAtt() {
+            document.getElementById('teacherAttBody').innerHTML = teacherAtt.length
+                ? teacherAtt.slice(0, 20).map((r, i) => `
+          <tr>
+            <td style="color:var(--clr-muted)">${i + 1}</td>
+            <td><code style="color:var(--clr-teal)">${r.empid}</code></td>
+            <td style="color:var(--clr-muted);font-size:0.82rem">${r.date}</td>
+            <td>${statusBadge(r.first)}</td>
+            <td>${statusBadge(r.second)}</td>
+          </tr>`).join('')
+                : `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--clr-muted);">No records yet</td></tr>`;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                const tabs = ['mark', 'view', 'teacher'];
+                b.classList.toggle('active', tabs[i] === tab);
+            });
+            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('pane-' + tab).classList.add('active');
+        }
+
+        function exportAttendance() {
+            const rows = [['Roll No', 'Date', 'First Half', 'Second Half']];
+            studentAtt.forEach(r => rows.push([r.rollno, r.date, r.first, r.second]));
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const a = document.createElement('a');
+            a.href = 'data:text/csv,' + encodeURIComponent(csv);
+            a.download = 'attendance.csv'; a.click();
+        }
+
+        function toast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', warn: 'fa-triangle-exclamation' };
+            t.className = `toast toast--${type}`;
+            t.innerHTML = `<i class="fa-solid ${icons[type]} toast__icon" style="color:${type === 'success' ? 'var(--clr-lime)' : type === 'error' ? '#ff6b6b' : 'var(--clr-gold)'}"></i><span class="toast__msg">${msg}</span>`;
+            c.appendChild(t); setTimeout(() => t.remove(), 3500);
+        }
+
+        updateSummary(); renderAttendance(); renderTeacherAtt();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Examination — EduSphere</title>
+    <link rel="icon" type="image/png" href="../Assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <style>
+        .pane {
+            display: none;
+        }
+
+        .pane.active {
+            display: block;
+        }
+
+        .enter-card {
+            background: var(--grad-card);
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-md);
+            padding: 28px 32px;
+            max-width: 640px;
+            margin-bottom: 28px;
+        }
+
+        .enter-card .field input,
+        .enter-card .field select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--clr-text);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .enter-card .field input:focus,
+        .enter-card .field select:focus {
+            border-color: var(--clr-teal);
+        }
+
+        .enter-card .field select option {
+            background: var(--clr-navy-mid);
+        }
+
+        .result-card {
+            background: var(--grad-card);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            max-width: 560px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--clr-border);
+            font-size: 0.9rem;
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-sub {
+            color: var(--clr-text);
+        }
+
+        .result-marks {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .grade-a {
+            color: var(--clr-lime);
+        }
+
+        .grade-b {
+            color: var(--clr-teal);
+        }
+
+        .grade-c {
+            color: var(--clr-gold);
+        }
+
+        .grade-f {
+            color: #ff8080;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0 0;
+            margin-top: 8px;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--clr-white);
+            border-top: 2px solid var(--clr-border-lg);
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-row input,
+        .search-row select {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            color: var(--clr-text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-row input:focus,
+        .search-row select:focus {
+            border-color: var(--clr-teal);
+        }
+
+        .search-row input {
+            min-width: 220px;
+        }
+
+        .search-row select option {
+            background: var(--clr-navy-mid);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell" id="appShell">
+
+        <header class="topbar">
+            <button class="topbar__toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+            <div class="topbar__brand">
+                <img src="../Assets/logo.png" alt="EduSphere" class="topbar__logo" />
+                <span class="topbar__name">EduSphere</span>
+            </div>
+            <div class="topbar__search"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                    placeholder="Search…" /></div>
+            <div class="topbar__actions">
+                <button class="topbar__icon-btn"><i class="fa-solid fa-bell"></i><span
+                        class="notif-badge"></span></button>
+                <div class="topbar__avatar">A</div>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <p class="sidebar__section-label">Main</p>
+            <a href="../index.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">Management</p>
+            <a href="students.html" class="nav-item"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
+            <a href="teachers.html" class="nav-item"><i class="fa-solid fa-chalkboard-user"></i><span>Faculty</span></a>
+            <a href="attendance.html" class="nav-item"><i
+                    class="fa-solid fa-calendar-check"></i><span>Attendance</span></a>
+            <a href="examination.html" class="nav-item active"><i
+                    class="fa-solid fa-file-pen"></i><span>Examination</span></a>
+            <a href="fees.html" class="nav-item"><i class="fa-solid fa-indian-rupee-sign"></i><span>Fee
+                    Management</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">System</p>
+            <a href="#" class="nav-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i><span>Log
+                    Out</span></a>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-header__title">Examination &amp; Marks</h1>
+                    <p class="page-header__sub">Enter subject marks and view student results</p>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--teal"><i class="fa-solid fa-file-pen"></i></div>
+                    <div class="stat-card__value" id="totalMarked">0</div>
+                    <div class="stat-card__label">Marks Entries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--lime"><i class="fa-solid fa-star"></i></div>
+                    <div class="stat-card__value">96%</div>
+                    <div class="stat-card__label">Highest Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--blue"><i class="fa-solid fa-chart-bar"></i></div>
+                    <div class="stat-card__value">74%</div>
+                    <div class="stat-card__label">Class Average</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--gold"><i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div class="stat-card__value">8</div>
+                    <div class="stat-card__label">Below 40% (At Risk)</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs" style="margin-bottom:24px;">
+                <button class="tab-btn active" onclick="switchTab('enter')">Enter Marks</button>
+                <button class="tab-btn" onclick="switchTab('result')">View Results</button>
+                <button class="tab-btn" onclick="switchTab('all')">All Records</button>
+            </div>
+
+            <!-- ── ENTER MARKS ── -->
+            <div class="pane active" id="pane-enter">
+                <div class="enter-card">
+                    <h3 style="color:var(--clr-white);font-size:1.05rem;font-weight:700;margin-bottom:20px;">
+                        <i class="fa-solid fa-keyboard" style="color:var(--clr-teal)"></i> Enter Examination Marks
+                    </h3>
+                    <div class="field" style="margin-bottom:16px;">
+                        <label>Roll Number</label>
+                        <input type="text" id="e_roll" placeholder="e.g. 1533001" />
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 16px;">
+                        <div
+                            style="padding:8px 0;font-size:0.78rem;font-weight:600;color:var(--clr-teal);text-transform:uppercase;letter-spacing:0.8px;">
+                            Subject</div>
+                        <div
+                            style="padding:8px 0;font-size:0.78rem;font-weight:600;color:var(--clr-teal);text-transform:uppercase;letter-spacing:0.8px;">
+                            Marks (out of 100)</div>
+                    </div>
+                    <div id="subjectRows"></div>
+                    <button class="btn btn-ghost btn-sm" onclick="addSubjectRow()"
+                        style="margin-bottom:20px;margin-top:4px;">
+                        <i class="fa-solid fa-plus"></i> Add Subject
+                    </button>
+                    <button class="btn btn-grad" style="width:100%;" onclick="saveMarks()">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Marks
+                    </button>
+                </div>
+            </div>
+
+            <!-- ── VIEW RESULT ── -->
+            <div class="pane" id="pane-result">
+                <div class="search-row">
+                    <input type="text" id="resultRoll" placeholder="Enter Roll Number to check result…" />
+                    <button class="btn btn-grad" onclick="searchResult()"><i class="fa-solid fa-magnifying-glass"></i>
+                        Search</button>
+                </div>
+                <div id="resultArea"></div>
+            </div>
+
+            <!-- ── ALL RECORDS ── -->
+            <div class="pane" id="pane-all">
+                <div class="search-row">
+                    <input type="text" id="allSearch" placeholder="🔍  Filter by roll number…"
+                        oninput="renderAllRecords()" />
+                </div>
+                <div class="card">
+                    <div class="card__body" style="padding:0;">
+                        <div class="es-table-wrap">
+                            <table class="es-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Roll No</th>
+                                        <th>Subject 1</th>
+                                        <th>Subject 2</th>
+                                        <th>Subject 3</th>
+                                        <th>Subject 4</th>
+                                        <th>Subject 5</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allRecordsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        if (!sessionStorage.getItem('es_user') && !localStorage.getItem('es_user')) {
+            window.location.href = '../Pages/login.html';
+        }
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('appShell').classList.toggle('collapsed');
+        });
+        function logout() {
+            sessionStorage.removeItem('es_user'); localStorage.removeItem('es_user');
+            window.location.href = '../Pages/login.html';
+        }
+
+        let marksData = JSON.parse(localStorage.getItem('es_marks') || '[]');
+        document.getElementById('totalMarked').textContent = marksData.length;
+
+        // Subject rows
+        let subjectCount = 0;
+        function addSubjectRow(subDefault = '', marksDefault = '') {
+            if (subjectCount >= 8) { toast('Maximum 8 subjects allowed.', 'warn'); return; }
+            subjectCount++;
+            const idx = subjectCount;
+            const div = document.createElement('div');
+            div.id = 'subRow' + idx;
+            div.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:0 16px;margin-bottom:10px;';
+            div.innerHTML = `
+      <input type="text" class="sub-name" placeholder="Subject ${idx} name" value="${subDefault}"
+        style="background:rgba(255,255,255,0.04);border:1px solid var(--clr-border-lg);border-radius:8px;padding:9px 12px;color:var(--clr-text);font-size:0.875rem;outline:none;width:100%;" />
+      <input type="number" class="sub-marks" placeholder="0–100" min="0" max="100" value="${marksDefault}"
+        style="background:rgba(255,255,255,0.04);border:1px solid var(--clr-border-lg);border-radius:8px;padding:9px 12px;color:var(--clr-text);font-size:0.875rem;outline:none;width:100%;" />
+    `;
+            document.getElementById('subjectRows').appendChild(div);
+        }
+        // Init with 5 rows
+        for (let i = 0; i < 5; i++) addSubjectRow();
+
+        function saveMarks() {
+            const roll = document.getElementById('e_roll').value.trim();
+            if (!roll) { toast('Enter a roll number.', 'error'); return; }
+
+            const subs = [...document.querySelectorAll('.sub-name')].map(el => el.value.trim());
+            const mks = [...document.querySelectorAll('.sub-marks')].map(el => el.value);
+
+            if (!subs[0]) { toast('Enter at least one subject name.', 'error'); return; }
+
+            const rec = { rollno: roll, subjects: subs, marks: mks, timestamp: new Date().toISOString() };
+            // Remove existing record for this roll
+            marksData = marksData.filter(r => r.rollno !== roll);
+            marksData.unshift(rec);
+            localStorage.setItem('es_marks', JSON.stringify(marksData));
+            document.getElementById('totalMarked').textContent = marksData.length;
+            toast('Marks saved for Roll No ' + roll + '!', 'success');
+        }
+
+        function gradeColor(m) {
+            const n = parseInt(m);
+            if (n >= 75) return 'grade-a';
+            if (n >= 60) return 'grade-b';
+            if (n >= 40) return 'grade-c';
+            return 'grade-f';
+        }
+
+        function searchResult() {
+            const roll = document.getElementById('resultRoll').value.trim();
+            if (!roll) { toast('Enter a roll number.', 'error'); return; }
+            const rec = marksData.find(r => r.rollno === roll);
+            const area = document.getElementById('resultArea');
+            if (!rec) {
+                area.innerHTML = `<div class="empty-state"><i class="fa-solid fa-circle-exclamation"></i><div class="empty-state__title">No results found</div><div class="empty-state__sub">No marks entry for Roll No ${roll}. Please enter marks first.</div></div>`;
+                return;
+            }
+            const total = rec.marks.reduce((a, b) => a + (parseInt(b) || 0), 0);
+            const max = rec.marks.filter(m => m !== '').length * 100;
+            const pct = max ? Math.round(total / max * 100) : 0;
+            const rows = rec.subjects.map((s, i) => s ? `
+      <div class="result-row">
+        <span class="result-sub">${s || 'Subject ' + (i + 1)}</span>
+        <span class="result-marks ${gradeColor(rec.marks[i])}">${rec.marks[i] || '—'}</span>
+      </div>` : '').join('');
+
+            area.innerHTML = `
+      <div class="result-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+          <div>
+            <div style="font-size:0.75rem;color:var(--clr-muted);text-transform:uppercase;letter-spacing:1px;">Examination Result</div>
+            <div style="font-size:1.2rem;font-weight:800;color:var(--clr-white);margin-top:4px;">Roll No: <span style="color:var(--clr-teal)">${rec.rollno}</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:2rem;font-weight:800;color:${pct >= 60 ? 'var(--clr-lime)' : pct >= 40 ? 'var(--clr-gold)' : '#ff8080'}">${pct}%</div>
+            <span class="badge ${pct >= 60 ? 'badge-green' : pct >= 40 ? 'badge-gold' : 'badge-red'}">${pct >= 60 ? 'PASS' : pct >= 40 ? 'AVERAGE' : 'FAIL'}</span>
+          </div>
+        </div>
+        ${rows}
+        <div class="total-row"><span>Total Marks</span><span>${total} / ${max}</span></div>
+      </div>`;
+        }
+
+        function renderAllRecords() {
+            const q = (document.getElementById('allSearch').value || '').toLowerCase();
+            const data = marksData.filter(r => !q || r.rollno.includes(q));
+            document.getElementById('allRecordsBody').innerHTML = data.length
+                ? data.map((r, i) => `
+          <tr>
+            <td style="color:var(--clr-muted)">${i + 1}</td>
+            <td><code style="color:var(--clr-teal)">${r.rollno}</code></td>
+            ${r.subjects.slice(0, 5).map((s, j) => `<td><span style="color:var(--clr-text);font-size:0.82rem">${s || '—'}</span><br><strong class="${gradeColor(r.marks[j])}">${r.marks[j] || '—'}</strong></td>`).join('')}
+            ${r.subjects.length < 5 ? Array(5 - r.subjects.length).fill('<td style="color:var(--clr-muted)">—</td>').join('') : ''}
+            <td><strong style="color:var(--clr-white)">${r.marks.reduce((a, b) => a + (parseInt(b) || 0), 0)}</strong></td>
+          </tr>`).join('')
+                : `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--clr-muted);">No records found</td></tr>`;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                const tabs = ['enter', 'result', 'all'];
+                b.classList.toggle('active', tabs[i] === tab);
+            });
+            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('pane-' + tab).classList.add('active');
+            if (tab === 'all') renderAllRecords();
+        }
+
+        function toast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', warn: 'fa-triangle-exclamation' };
+            t.className = `toast toast--${type}`;
+            t.innerHTML = `<i class="fa-solid ${icons[type]} toast__icon" style="color:${type === 'success' ? 'var(--clr-lime)' : type === 'error' ? '#ff6b6b' : 'var(--clr-gold)'}"></i><span class="toast__msg">${msg}</span>`;
+            c.appendChild(t); setTimeout(() => t.remove(), 3500);
+        }
+
+        if (location.hash === '#result') switchTab('result');
+        if (location.hash === '#marks') switchTab('enter');
+    </script>
+</body>
+
+</html>

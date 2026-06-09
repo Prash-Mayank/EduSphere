@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Faculty — EduSphere</title>
+    <link rel="icon" type="image/png" href="../Assets/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="../CSS/style.css" />
+    <style>
+        .modal-overlay {
+            display: none;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border-lg);
+            border-radius: var(--radius-sm);
+            padding: 9px 14px;
+            color: var(--clr-text);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-bar input:focus,
+        .filter-bar select:focus {
+            border-color: var(--clr-teal);
+        }
+
+        .filter-bar input {
+            min-width: 240px;
+        }
+
+        .filter-bar select option {
+            background: var(--clr-navy-mid);
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tbl-btn {
+            background: none;
+            border: 1px solid var(--clr-border);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .tbl-btn--edit {
+            color: var(--clr-teal);
+            border-color: rgba(0, 200, 200, 0.3);
+        }
+
+        .tbl-btn--edit:hover {
+            background: rgba(0, 200, 200, 0.1);
+        }
+
+        .tbl-btn--del {
+            color: #ff8080;
+            border-color: rgba(255, 80, 80, 0.3);
+        }
+
+        .tbl-btn--del:hover {
+            background: rgba(255, 80, 80, 0.1);
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .page-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--clr-border);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            color: var(--clr-muted);
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            border-color: var(--clr-teal);
+            color: var(--clr-teal);
+            background: rgba(0, 200, 200, 0.08);
+        }
+
+        .avatar-sm {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--grad-brand);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--clr-navy);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell" id="appShell">
+
+        <header class="topbar">
+            <button class="topbar__toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+            <div class="topbar__brand">
+                <img src="../Assets/logo.png" alt="EduSphere" class="topbar__logo" />
+                <span class="topbar__name">EduSphere</span>
+            </div>
+            <div class="topbar__search"><i class="fa-solid fa-magnifying-glass"></i><input type="text"
+                    placeholder="Search faculty…" /></div>
+            <div class="topbar__actions">
+                <button class="topbar__icon-btn"><i class="fa-solid fa-bell"></i><span
+                        class="notif-badge"></span></button>
+                <div class="topbar__avatar" title="Admin">A</div>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <p class="sidebar__section-label">Main</p>
+            <a href="../index.html" class="nav-item"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">Management</p>
+            <a href="students.html" class="nav-item"><i class="fa-solid fa-user-graduate"></i><span>Students</span></a>
+            <a href="teachers.html" class="nav-item active"><i
+                    class="fa-solid fa-chalkboard-user"></i><span>Faculty</span></a>
+            <a href="attendance.html" class="nav-item"><i
+                    class="fa-solid fa-calendar-check"></i><span>Attendance</span></a>
+            <a href="examination.html" class="nav-item"><i class="fa-solid fa-file-pen"></i><span>Examination</span></a>
+            <a href="fees.html" class="nav-item"><i class="fa-solid fa-indian-rupee-sign"></i><span>Fee
+                    Management</span></a>
+            <div class="sidebar__divider"></div>
+            <p class="sidebar__section-label">System</p>
+            <a href="#" class="nav-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i><span>Log
+                    Out</span></a>
+        </aside>
+
+        <main class="main-content">
+
+            <div class="page-header">
+                <div>
+                    <h1 class="page-header__title">Faculty Management</h1>
+                    <p class="page-header__sub">Manage teacher records, departments and assignments</p>
+                </div>
+                <div class="page-header__actions">
+                    <button class="btn btn-outline" onclick="exportTable()"><i class="fa-solid fa-download"></i>
+                        Export</button>
+                    <button class="btn btn-grad" onclick="openModal('add')"><i class="fa-solid fa-user-tie"></i> Add
+                        Faculty</button>
+                </div>
+            </div>
+
+            <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px;">
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--lime"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div class="stat-card__value">34</div>
+                    <div class="stat-card__label">Total Faculty</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--teal"><i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div class="stat-card__value">5</div>
+                    <div class="stat-card__label">Departments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--blue"><i class="fa-solid fa-user-check"></i></div>
+                    <div class="stat-card__value">31</div>
+                    <div class="stat-card__label">Present Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon stat-card__icon--gold"><i class="fa-solid fa-star"></i></div>
+                    <div class="stat-card__value">12</div>
+                    <div class="stat-card__label">Senior Faculty</div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <input type="text" id="searchInput" placeholder="🔍  Search by name, ID, email…"
+                    oninput="filterTable()" />
+                <select id="filterDept" onchange="filterTable()">
+                    <option value="">All Departments</option>
+                    <option>Computer Science</option>
+                    <option>Electronics</option>
+                    <option>Electrical</option>
+                    <option>Mechanical</option>
+                    <option>Civil</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" onclick="clearFilters()"><i class="fa-solid fa-xmark"></i>
+                    Clear</button>
+            </div>
+
+            <div class="card">
+                <div class="card__body" style="padding:0;">
+                    <div class="es-table-wrap">
+                        <table class="es-table" id="teachersTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Faculty</th>
+                                    <th>Emp ID</th>
+                                    <th>Qualification</th>
+                                    <th>Department</th>
+                                    <th>Phone</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <div
+                        style="padding:16px 20px;border-top:1px solid var(--clr-border);display:flex;align-items:center;justify-content:space-between;">
+                        <span style="font-size:0.8rem;color:var(--clr-muted);" id="tableInfo">Showing 1–10 of 34</span>
+                        <div class="pagination">
+                            <button class="page-btn" onclick="changePage(-1)"><i
+                                    class="fa-solid fa-chevron-left"></i></button>
+                            <button class="page-btn active" id="pageNum">1</button>
+                            <button class="page-btn" onclick="changePage(1)"><i
+                                    class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="teacherModal">
+        <div class="modal" style="max-width:680px;">
+            <div class="modal__header">
+                <h3 class="modal__title" id="modalTitle"><i class="fa-solid fa-user-tie"
+                        style="color:var(--clr-teal)"></i> Add New Faculty</h3>
+                <button class="modal__close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Full Name</label><input type="text" id="f_name"
+                        placeholder="e.g. Dr. Arjun Mehta" /></div>
+                <div class="field"><label>Father's Name</label><input type="text" id="f_father"
+                        placeholder="e.g. Mr. Suresh Mehta" /></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Age</label><input type="number" id="f_age" placeholder="e.g. 35" /></div>
+                <div class="field"><label>DOB (dd/mm/yyyy)</label><input type="text" id="f_dob"
+                        placeholder="10/06/1989" /></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Address</label><input type="text" id="f_address" placeholder="City, State" />
+                </div>
+                <div class="field"><label>Phone</label><input type="text" id="f_phone" placeholder="10-digit number" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Email</label><input type="email" id="f_email"
+                        placeholder="teacher@univ.ac.in" /></div>
+                <div class="field"><label>Aadhar No</label><input type="text" id="f_aadhar"
+                        placeholder="12-digit Aadhar" /></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Class X (%)</label><input type="text" id="f_x" placeholder="e.g. 90.2" />
+                </div>
+                <div class="field"><label>Class XII (%)</label><input type="text" id="f_xii" placeholder="e.g. 88.5" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="field">
+                    <label>Highest Qualification</label>
+                    <select id="f_edu">
+                        <option value="">Select qualification</option>
+                        <option>B.Tech</option>
+                        <option>M.Tech</option>
+                        <option>MBA</option>
+                        <option>MCA</option>
+                        <option>M.Sc</option>
+                        <option>Ph.D</option>
+                        <option>B.Sc</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Department</label>
+                    <select id="f_dept">
+                        <option value="">Select department</option>
+                        <option>Computer Science</option>
+                        <option>Electronics</option>
+                        <option>Electrical</option>
+                        <option>Mechanical</option>
+                        <option>Civil</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Employee ID <span
+                        style="color:var(--clr-muted);font-size:0.75rem;">(auto-generated)</span></label>
+                <input type="text" id="f_empid" readonly style="opacity:0.6;cursor:not-allowed;" />
+            </div>
+            <div style="display:flex;gap:12px;margin-top:8px;">
+                <button class="btn btn-grad" style="flex:1" onclick="saveFaculty()"><i
+                        class="fa-solid fa-floppy-disk"></i> Save Faculty</button>
+                <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        if (!sessionStorage.getItem('es_user') && !localStorage.getItem('es_user')) {
+            window.location.href = '../Pages/login.html';
+        }
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('appShell').classList.toggle('collapsed');
+        });
+        function logout() {
+            sessionStorage.removeItem('es_user'); localStorage.removeItem('es_user');
+            window.location.href = '../Pages/login.html';
+        }
+
+        const DEPTS = ['Computer Science', 'Electronics', 'Electrical', 'Mechanical', 'Civil'];
+        const QUALS = ['Ph.D', 'M.Tech', 'MBA', 'MCA', 'M.Sc'];
+        const NAMES = ['Dr. Arjun Mehta', 'Prof. Anita Singh', 'Dr. Rajiv Kumar', 'Prof. Sunita Rao', 'Dr. Vikash Sharma',
+            'Prof. Priya Das', 'Dr. Suresh Nair', 'Prof. Kavita Joshi', 'Dr. Mohan Yadav', 'Prof. Rekha Iyer',
+            'Dr. Anil Gupta', 'Prof. Leena Shah', 'Dr. Dinesh Malhotra', 'Prof. Uma Verma', 'Dr. Sanjay Mishra'];
+
+        let teachers = [];
+        const stored = localStorage.getItem('es_teachers');
+        if (stored) {
+            teachers = JSON.parse(stored);
+        } else {
+            for (let i = 0; i < 15; i++) {
+                teachers.push({
+                    id: i + 1,
+                    name: NAMES[i],
+                    father: 'Mr. Sharma',
+                    age: 30 + Math.floor(Math.random() * 20),
+                    dob: `${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}/0${Math.floor(Math.random() * 9) + 1}/197${Math.floor(Math.random() * 9) + 1}`,
+                    address: ['Delhi', 'Noida', 'Mumbai', 'Pune', 'Bengaluru'][i % 5],
+                    phone: '99' + String(Math.floor(Math.random() * 1e8)).padStart(8, '0'),
+                    email: NAMES[i].replace(/Dr\. |Prof\. /, '').split(' ')[0].toLowerCase() + '@univ.ac.in',
+                    x: (78 + Math.random() * 18).toFixed(1),
+                    xii: (72 + Math.random() * 22).toFixed(1),
+                    aadhar: String(Math.floor(1e11 + Math.random() * 9e11)),
+                    edu: QUALS[i % QUALS.length],
+                    dept: DEPTS[i % DEPTS.length],
+                    empid: '101' + String(1000 + i),
+                });
+            }
+            localStorage.setItem('es_teachers', JSON.stringify(teachers));
+        }
+
+        let currentPage = 1; const pageSize = 10; let editingId = null;
+
+        function getFiltered() {
+            const q = (document.getElementById('searchInput').value || '').toLowerCase();
+            const d = document.getElementById('filterDept').value;
+            return teachers.filter(t =>
+                (!q || t.name.toLowerCase().includes(q) || t.empid.includes(q) || t.email.toLowerCase().includes(q)) &&
+                (!d || t.dept === d)
+            );
+        }
+
+        function renderTable() {
+            const data = getFiltered();
+            const start = (currentPage - 1) * pageSize;
+            const page = data.slice(start, start + pageSize);
+            document.getElementById('tableBody').innerHTML = page.map((t, i) => `
+      <tr>
+        <td style="color:var(--clr-muted)">${start + i + 1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="avatar-sm">${t.name.replace(/Dr\. |Prof\. /, '').charAt(0)}</div>
+            <div>
+              <div style="font-weight:600;color:var(--clr-white)">${t.name}</div>
+              <div style="font-size:0.75rem;color:var(--clr-muted)">${t.email}</div>
+            </div>
+          </div>
+        </td>
+        <td><code style="color:var(--clr-teal);font-size:0.82rem">${t.empid}</code></td>
+        <td><span class="badge badge-blue">${t.edu}</span></td>
+        <td><span style="color:var(--clr-muted);font-size:0.85rem">${t.dept}</span></td>
+        <td>${t.phone}</td>
+        <td>
+          <div class="action-cell">
+            <button class="tbl-btn tbl-btn--edit" onclick="openModal('edit',${t.id})"><i class="fa-solid fa-pen"></i> Edit</button>
+            <button class="tbl-btn tbl-btn--del" onclick="deleteTeacher(${t.id})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+            document.getElementById('tableInfo').textContent = `Showing ${start + 1}–${Math.min(start + pageSize, data.length)} of ${data.length}`;
+            document.getElementById('pageNum').textContent = currentPage;
+        }
+
+        function filterTable() { currentPage = 1; renderTable(); }
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterDept').value = '';
+            filterTable();
+        }
+        function changePage(d) {
+            const total = Math.ceil(getFiltered().length / pageSize);
+            currentPage = Math.max(1, Math.min(total, currentPage + d));
+            renderTable();
+        }
+
+        function genEmpId() { return '101' + String(Math.floor(1000 + Math.random() * 9000)); }
+
+        function openModal(mode, id) {
+            document.getElementById('teacherModal').classList.add('open');
+            if (mode === 'add') {
+                editingId = null;
+                document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-user-tie" style="color:var(--clr-teal)"></i> Add New Faculty';
+                ['f_name', 'f_father', 'f_age', 'f_dob', 'f_address', 'f_phone', 'f_email', 'f_aadhar', 'f_x', 'f_xii', 'f_edu', 'f_dept'].forEach(i => {
+                    const el = document.getElementById(i); if (el) el.value = '';
+                });
+                document.getElementById('f_empid').value = genEmpId();
+            } else {
+                editingId = id;
+                const t = teachers.find(x => x.id === id);
+                document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen" style="color:var(--clr-teal)"></i> Edit Faculty';
+                document.getElementById('f_name').value = t.name;
+                document.getElementById('f_father').value = t.father;
+                document.getElementById('f_age').value = t.age;
+                document.getElementById('f_dob').value = t.dob;
+                document.getElementById('f_address').value = t.address;
+                document.getElementById('f_phone').value = t.phone;
+                document.getElementById('f_email').value = t.email;
+                document.getElementById('f_aadhar').value = t.aadhar;
+                document.getElementById('f_x').value = t.x;
+                document.getElementById('f_xii').value = t.xii;
+                document.getElementById('f_edu').value = t.edu;
+                document.getElementById('f_dept').value = t.dept;
+                document.getElementById('f_empid').value = t.empid;
+            }
+        }
+        function closeModal() { document.getElementById('teacherModal').classList.remove('open'); }
+
+        function saveFaculty() {
+            const data = {
+                name: document.getElementById('f_name').value.trim(),
+                father: document.getElementById('f_father').value.trim(),
+                age: document.getElementById('f_age').value,
+                dob: document.getElementById('f_dob').value,
+                address: document.getElementById('f_address').value,
+                phone: document.getElementById('f_phone').value,
+                email: document.getElementById('f_email').value,
+                aadhar: document.getElementById('f_aadhar').value,
+                x: document.getElementById('f_x').value,
+                xii: document.getElementById('f_xii').value,
+                edu: document.getElementById('f_edu').value,
+                dept: document.getElementById('f_dept').value,
+                empid: document.getElementById('f_empid').value,
+            };
+            if (!data.name) { toast('Please enter a name.', 'error'); return; }
+            if (editingId) {
+                const idx = teachers.findIndex(t => t.id === editingId);
+                teachers[idx] = { ...teachers[idx], ...data };
+                toast('Faculty updated successfully!', 'success');
+            } else {
+                teachers.push({ id: Date.now(), ...data });
+                toast('Faculty added successfully!', 'success');
+            }
+            localStorage.setItem('es_teachers', JSON.stringify(teachers));
+            closeModal(); renderTable();
+        }
+
+        function deleteTeacher(id) {
+            if (!confirm('Delete this faculty record?')) return;
+            teachers = teachers.filter(t => t.id !== id);
+            localStorage.setItem('es_teachers', JSON.stringify(teachers));
+            renderTable(); toast('Faculty record deleted.', 'warn');
+        }
+
+        function exportTable() {
+            const rows = [['Name', 'Emp ID', 'Qualification', 'Department', 'Phone', 'Email']];
+            teachers.forEach(t => rows.push([t.name, t.empid, t.edu, t.dept, t.phone, t.email]));
+            const csv = rows.map(r => r.join(',')).join('\n');
+            const a = document.createElement('a');
+            a.href = 'data:text/csv,' + encodeURIComponent(csv); a.download = 'faculty.csv'; a.click();
+        }
+
+        function toast(msg, type = 'success') {
+            const c = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', warn: 'fa-triangle-exclamation' };
+            t.className = `toast toast--${type}`;
+            t.innerHTML = `<i class="fa-solid ${icons[type]} toast__icon" style="color:${type === 'success' ? 'var(--clr-lime)' : type === 'error' ? '#ff6b6b' : 'var(--clr-gold)'}"></i><span class="toast__msg">${msg}</span>`;
+            c.appendChild(t); setTimeout(() => t.remove(), 3500);
+        }
+
+        renderTable();
+        if (location.hash === '#add') openModal('add');
+    </script>
+</body>
+
+</html>
