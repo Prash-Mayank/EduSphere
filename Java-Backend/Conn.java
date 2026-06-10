@@ -1,4 +1,3 @@
-package university;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,10 +9,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * EduSphere — Database Connection Helper Reads credentials from db.properties
- * (never hardcoded).
- */
 public class Conn {
 
     Connection c;
