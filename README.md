@@ -1,6 +1,5 @@
-<div align="center">
 
-<img src="Assets/banner.png" alt="EduSphere Logo" width="110" />
+<img src="Assets/banner.png" alt="EduSphere Logo" />
 
 # EduSphere — Smart University Management System
 
