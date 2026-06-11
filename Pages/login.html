@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="../JS/api.js"></script>
 
 <head>
     <meta charset="UTF-8" />
@@ -551,7 +552,6 @@
     </div>
 
     <script>
-        /* ── Toggle password visibility ── */
         function togglePassword() {
             const pwd = document.getElementById('password');
             const icon = document.getElementById('togglePwd');
@@ -561,51 +561,49 @@
             icon.classList.toggle('fa-eye-slash', show);
         }
 
-        /* ── Show / hide error ── */
         function showError(msg) {
             const err = document.getElementById('errorMsg');
-            const text = document.getElementById('errorText');
-            text.textContent = msg;
+            document.getElementById('errorText').textContent = msg;
             err.style.display = 'flex';
         }
+        function clearError() { document.getElementById('errorMsg').style.display = 'none'; }
 
-        function clearError() {
-            document.getElementById('errorMsg').style.display = 'none';
-        }
-
-        /* ── Handle login ── */
-        function handleLogin() {
+        async function handleLogin() {
             const u = document.getElementById('username').value.trim();
             const p = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
 
             clearError();
-
-            if (!u && !p) { showError('Please enter your username and password.'); return; }
             if (!u) { showError('Please enter your username.'); return; }
             if (!p) { showError('Please enter your password.'); return; }
 
-            if (u === 'Mayank Prashar' && p === 'Mayank@123') {
-                if (document.getElementById('remember').checked) {
-                    localStorage.setItem('es_user', u);
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+
+            try {
+                const data = await api.login(u, p);
+                if (data.success) {
+                    if (document.getElementById('remember').checked)
+                        localStorage.setItem('es_user', u);
+                    sessionStorage.setItem('es_user', u);
+                    window.location.href = '../index.html';
+                } else {
+                    showError(data.message || 'Invalid username or password.');
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
                 }
-                sessionStorage.setItem('es_user', u);
-                window.location.href = '../index.html';
-            } else {
-                showError('Invalid username or password. Please try again.');
-                document.getElementById('password').value = '';
-                document.getElementById('password').focus();
+            } catch (err) {
+                showError('Could not reach server. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In';
             }
         }
 
-        /* ── Enter key support ── */
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Enter') handleLogin();
-        });
-
-        /* ── Clear error on input ── */
-        ['username', 'password'].forEach(id => {
-            document.getElementById(id).addEventListener('input', clearError);
-        });
+        document.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+        ['username', 'password'].forEach(id =>
+            document.getElementById(id).addEventListener('input', clearError)
+        );
     </script>
 </body>
 
