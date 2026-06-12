@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="./JS/api.js"></script>
 
 <head>
     <meta charset="UTF-8" />
@@ -313,6 +312,7 @@
             }
         }
     </style>
+    <script src="./JS/api.js"></script>
 </head>
 
 <body>
@@ -359,7 +359,7 @@
             <a href="Pages/students.html" class="nav-item">
                 <i class="fa-solid fa-user-graduate"></i>
                 <span>Students</span>
-                <span class="nav-badge">248</span>
+                <span class="nav-badge" id="navStudentCount">—</span>
             </a>
 
             <a href="Pages/teachers.html" class="nav-item">
@@ -411,14 +411,14 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card__icon stat-card__icon--teal"><i class="fa-solid fa-user-graduate"></i></div>
-                    <div class="stat-card__value">248</div>
+                    <div class="stat-card__value" id="statStudents">—</div>
                     <div class="stat-card__label">Total Students</div>
-                    <div class="stat-card__delta stat-card__delta--up"><i class="fa-solid fa-arrow-trend-up"></i> +12
+                    <div class="stat-card__delta stat-card__delta--up" id="statStudentsDelta"><i class="fa-solid fa-arrow-trend-up"></i> +12
                         this semester</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-card__icon stat-card__icon--lime"><i class="fa-solid fa-chalkboard-user"></i></div>
-                    <div class="stat-card__value">34</div>
+                    <div class="stat-card__value" id="statTeachers">—</div>
                     <div class="stat-card__label">Faculty Members</div>
                     <div class="stat-card__delta stat-card__delta--up"><i class="fa-solid fa-arrow-trend-up"></i> +2
                         this month</div>
@@ -433,10 +433,10 @@
                 <div class="stat-card">
                     <div class="stat-card__icon stat-card__icon--gold"><i class="fa-solid fa-indian-rupee-sign"></i>
                     </div>
-                    <div class="stat-card__value">₹18.4L</div>
-                    <div class="stat-card__label">Fee Collected</div>
-                    <div class="stat-card__delta stat-card__delta--down"><i class="fa-solid fa-arrow-trend-down"></i>
-                        ₹3.2L pending</div>
+                    <div class="stat-card__value" id="statFeeRecords">—</div>
+                    <div class="stat-card__label">Fee Records</div>
+                    <div class="stat-card__delta stat-card__delta--down" id="statFeeDelta"><i class="fa-solid fa-arrow-trend-down"></i>
+                        Loading…</div>
                 </div>
             </div>
 
@@ -804,6 +804,31 @@
             localStorage.removeItem('es_user');
             window.location.href = 'Pages/login.html';
         }
+
+        // Load live stats from API
+        async function loadStats() {
+            try {
+                const stats = await api.getStats();
+                if (stats.students !== undefined) {
+                    document.getElementById('statStudents').textContent = stats.students;
+                    document.getElementById('navStudentCount').textContent = stats.students;
+                }
+                if (stats.teachers !== undefined) {
+                    document.getElementById('statTeachers').textContent = stats.teachers;
+                }
+                if (stats.feeRecords !== undefined) {
+                    document.getElementById('statFeeRecords').textContent = stats.feeRecords;
+                    document.getElementById('statFeeDelta').innerHTML =
+                        '<i class="fa-solid fa-receipt"></i> Total payments recorded';
+                }
+            } catch (e) {
+                ['statStudents','statTeachers','statFeeRecords'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '—';
+                });
+            }
+        }
+        loadStats();
     </script>
 </body>
 

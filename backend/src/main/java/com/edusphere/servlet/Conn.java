@@ -14,7 +14,7 @@ public class Conn {
 
     public Conn() {
         try {
-            String url  = System.getenv().getOrDefault("DB_URL",  "jdbc:mysql://localhost:3306/ums?useSSL=false&serverTimezone=UTC");
+            String url = System.getenv().getOrDefault("DB_URL", "jdbc:mysql://localhost:3306/ums?useSSL=false&serverTimezone=UTC");
             String user = System.getenv().getOrDefault("DB_USER", "root");
             String pass = System.getenv().getOrDefault("DB_PASS", "");
 
@@ -24,10 +24,10 @@ public class Conn {
 
         } catch (ClassNotFoundException e) {
             Logger.getLogger(Conn.class.getName()).log(Level.SEVERE,
-                "MySQL JDBC Driver not found.", e);
+                    "MySQL JDBC Driver not found.", e);
         } catch (SQLException e) {
             Logger.getLogger(Conn.class.getName()).log(Level.SEVERE,
-                "DB connection failed: " + e.getMessage(), e);
+                    "DB connection failed: " + e.getMessage(), e);
         }
     }
 }

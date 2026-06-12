@@ -27,6 +27,8 @@ async function loadTeachers() {
     try {
         teachers = await api.getTeachers();
         renderTable();
+        const card = document.querySelector('.stat-card__value');
+        if (card) card.textContent = teachers.length;
     } catch (e) {
         toast('Failed to load faculty from server.', 'error');
     }

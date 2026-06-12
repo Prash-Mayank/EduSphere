@@ -5,11 +5,6 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.ResultSet;
 
-/**
- * GET  /api/fees            — all fee records
- * GET  /api/fees?rollno=xxx — fee record for one student
- * POST /api/fees            — record a payment
- */
 @WebServlet("/api/fees")
 public class FeeServlet extends HttpServlet {
 
@@ -30,17 +25,19 @@ public class FeeServlet extends HttpServlet {
             StringBuilder sb = new StringBuilder("[");
             boolean first = true;
             while (rs.next()) {
-                if (!first) sb.append(",");
+                if (!first) {
+                    sb.append(",");
+                }
                 first = false;
                 sb.append("{")
-                  .append("\"rollno\":").append(json(rs.getString("rollno"))).append(",")
-                  .append("\"name\":").append(json(rs.getString("name"))).append(",")
-                  .append("\"fathers_name\":").append(json(rs.getString("fathers_name"))).append(",")
-                  .append("\"course\":").append(json(rs.getString("course"))).append(",")
-                  .append("\"branch\":").append(json(rs.getString("branch"))).append(",")
-                  .append("\"semester\":").append(json(rs.getString("semester"))).append(",")
-                  .append("\"fee_paid\":").append(json(rs.getString("fee_paid")))
-                  .append("}");
+                        .append("\"rollno\":").append(json(rs.getString("rollno"))).append(",")
+                        .append("\"name\":").append(json(rs.getString("name"))).append(",")
+                        .append("\"fathers_name\":").append(json(rs.getString("fathers_name"))).append(",")
+                        .append("\"course\":").append(json(rs.getString("course"))).append(",")
+                        .append("\"branch\":").append(json(rs.getString("branch"))).append(",")
+                        .append("\"semester\":").append(json(rs.getString("semester"))).append(",")
+                        .append("\"fee_paid\":").append(json(rs.getString("fee_paid")))
+                        .append("}");
             }
             sb.append("]");
             conn.c.close();
@@ -74,10 +71,15 @@ public class FeeServlet extends HttpServlet {
         }
     }
 
-    @Override protected void doOptions(HttpServletRequest req, HttpServletResponse res) { res.setStatus(200); }
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse res) {
+        res.setStatus(200);
+    }
 
     private String json(String val) {
-        if (val == null) return "null";
+        if (val == null) {
+            return "null";
+        }
         return "\"" + val.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 }

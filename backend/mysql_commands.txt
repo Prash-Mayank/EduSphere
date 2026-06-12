@@ -43,3 +43,6 @@ CREATE TABLE marks (
   rollno VARCHAR(255), marks1 VARCHAR(255), marks2 VARCHAR(255),
   marks3 VARCHAR(255), marks4 VARCHAR(255), marks5 VARCHAR(255)
 );
+
+ALTER TABLE subject ADD PRIMARY KEY (rollno);
+ALTER TABLE marks ADD PRIMARY KEY (rollno);

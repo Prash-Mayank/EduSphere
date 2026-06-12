@@ -130,12 +130,26 @@ async function searchResult() {
 let allMarksCache = [];
 
 async function loadAllRecords() {
-    // The API doesn't have a list-all-marks endpoint, so we load all students
-    // and for each student we already have marks loaded via "All Records" tab.
-    // We use whatever we fetched previously + add the just-saved record.
-    // For a full list, we'd need a /api/marks/all endpoint.
-    // For now, re-render with the cached data.
-    renderAllRecords();
+    // Called after saveMarks() — silently refreshes the cache in the background
+    // so "All Records" tab is up-to-date when the user switches to it.
+    try {
+        const students = await api.getStudents();
+        const results = await Promise.all(
+            students.map(s => api.getMarks(s.rollno).catch(() => null))
+        );
+        allMarksCache = results
+            .filter(r => r && r.subjects && r.marks)
+            .map(r => ({
+                rollno:   r.rollno,
+                subjects: [r.subjects.s1, r.subjects.s2, r.subjects.s3, r.subjects.s4, r.subjects.s5],
+                marks:    [r.marks.m1,    r.marks.m2,    r.marks.m3,    r.marks.m4,    r.marks.m5],
+            }));
+        document.getElementById('totalMarked').textContent = allMarksCache.length;
+        renderAllRecords();
+    } catch (e) {
+        // Non-fatal — just re-render whatever we have
+        renderAllRecords();
+    }
 }
 
 function renderAllRecords() {
